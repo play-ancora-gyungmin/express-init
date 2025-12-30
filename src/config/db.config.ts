@@ -1,9 +1,9 @@
-import { PrismaClient, Prisma } from '../generated/prisma/client';
+import { PrismaClient, Prisma } from '../generated/prisma/client.js';
 import { PrismaPg } from '@prisma/adapter-pg'; // Assuming this is the correct import path
 import { config, isDevelopment } from './env.config.js';
 
 const getPrismaLogLevel = () => {
-  if (!isDevelopment) {
+  if (!isDevelopment()) {
     return ['warn', 'error'] as Prisma.LogLevel[];
   }
   //개발 환경에서만 추가 로깅 개방
@@ -19,7 +19,7 @@ export const prisma = new PrismaClient({
   log: getPrismaLogLevel(),
 });
 
-export async function disconnectDB() {
+export async function disconnectDB(): Promise<void> {
   try {
     await prisma.$disconnect();
     console.log('📦 Disconnected from the database.');

@@ -1,6 +1,7 @@
+import { ErrorRequestHandler } from 'express';
 import { HttpException } from '../err/httpException.js';
 
-export const errorHandler = (error, req, res, _next) => {
+export const errorHandler: ErrorRequestHandler = (error, req, res, _next) => {
   console.error('error message', error);
 
   if (error instanceof HttpException) {

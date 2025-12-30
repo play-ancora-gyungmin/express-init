@@ -29,6 +29,12 @@ export default [
       'no-console': 'off',
       'prefer-const': 'error',
       'no-var': 'error',
+      '@typescript-eslint/no-namespace': [
+        'error',
+        {
+          allowDeclarations: true,
+        },
+      ],
 
       // 3. 세미콜론 및 쿼트 설정 (TS 호환 확인)
       semi: ['error', 'always'],

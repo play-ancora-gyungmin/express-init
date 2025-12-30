@@ -1,13 +1,17 @@
 import { z } from 'zod';
-import { BadRequestException } from '../err/badRequestException.js';
+import { BadRequestException } from '../err/httpException.js';
+import { RequestHandler } from 'express';
 
 /**
  * @param {z.ZodSchema<any>} schema 검사할 Zod 스키마
  * @param {'body' | 'query' | 'params'} type 검사할 요청 데이터의 위치
- * @returns {Function} Express 미들웨어 함수
+ * @returns {Function: RequestHandler} Express 미들웨어 함수
  */
 export const validate =
-  (schema, type = 'body') =>
+  (
+    schema: z.ZodSchema,
+    type: 'body' | 'query' | 'params' = 'body',
+  ): RequestHandler =>
   async (req, res, next) => {
     try {
       const dataToValidate = req[type] || {};
@@ -15,14 +19,19 @@ export const validate =
       next();
     } catch (error) {
       if (error instanceof z.ZodError) {
-        const formattedErrors = error.errors.map((err) => ({
+        console.log('error.issues', error.issues);
+        const formattedErrors = error.issues.map((err) => ({
           path: err.path.join('.'),
           message: err.message,
           location: type,
         }));
-        next(new BadRequestException('유효성 검사 실패', formattedErrors));
+        next(
+          new BadRequestException(
+            formattedErrors[0].message,
+            formattedErrors as never[],
+          ),
+        );
       } else {
-        // 다른 오류는 다음 오류 핸들러로 전달한다.
         next(error);
       }
     }
