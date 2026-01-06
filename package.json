@@ -12,6 +12,7 @@
     "dev": "tsx watch src/app.ts",
     "build": "tsc",
     "start": "node dist/app.js",
+    "test": "jest --passWithNoTests",
     "format": "prettier --write .",
     "prepare": "husky"
   },
@@ -59,6 +60,7 @@
     "eslint": "^9.37.0",
     "eslint-config-prettier": "^10.1.8",
     "husky": "^9.1.7",
+    "jest": "^30.2.0",
     "lint-staged": "^16.2.4",
     "prettier": "^3.6.2",
     "prisma": "^7.2.0",
